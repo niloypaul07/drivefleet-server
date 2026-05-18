@@ -1,3 +1,6 @@
+import dns from "dns";
+dns.setServers(["8.8.8.8", "8.8.4.4", "1.1.1.1"]);
+
 import dotenv from 'dotenv';
 import express from 'express';
 import cors from 'cors';
@@ -17,8 +20,8 @@ app.use(cors({
     credentials: true
 }));
 
-// Mount Better Auth handler BEFORE express.json()
-app.all("/api/auth/*", toNodeHandler(auth));
+// Mount Better Auth handler BEFORE express.json() - Express v5 uses /*splat
+app.all("/api/auth/{*splat}", toNodeHandler(auth));
 
 // Global Middleware
 app.use(express.json());
