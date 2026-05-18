@@ -256,7 +256,7 @@ async function run() {
     app.post('/bookings', verifyToken, async (req, res) => {
       const booking = req.body;
       booking.userEmail = req.user.email;
-      booking.bookingDate = new Date(); // Explore new Date() as requested
+      booking.bookingDate = booking.bookingDate ? new Date(booking.bookingDate) : new Date(); // Support user-selected date or fallback to new Date()
 
       // Increment booking_count
       const carFilter = { _id: new ObjectId(booking.carId) };
