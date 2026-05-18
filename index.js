@@ -72,6 +72,103 @@ async function run() {
     const carsCollection = db.collection("cars");
     const bookingsCollection = db.collection("bookings");
 
+    // Seed database if empty
+    try {
+      const count = await carsCollection.countDocuments();
+      if (count === 0) {
+        console.log("Seeding sample cars into MongoDB database...");
+        await carsCollection.insertMany([
+          {
+            modelName: "Model S Plaid",
+            brand: "Tesla",
+            type: "Electric",
+            price: 120,
+            imageUrl: "https://images.pexels.com/photos/11139552/pexels-photo-11139552.jpeg?auto=compress&cs=tinysrgb&w=800",
+            availability: "Available",
+            description: "Experience the future of driving with the ultimate electric sports sedan. 1020 horsepower, state-of-the-art tech, and luxury styling.",
+            features: ["Autopilot", "Premium Audio", "Panoramic Roof", "Heated Seats"],
+            capacity: 5,
+            addedBy: "admin@drivefleet.com",
+            booking_count: 5,
+            createdAt: new Date(Date.now() - 6 * 3600000)
+          },
+          {
+            modelName: "Sport",
+            brand: "Range Rover",
+            type: "SUV",
+            price: 150,
+            imageUrl: "https://images.pexels.com/photos/1007431/pexels-photo-1007431.jpeg?auto=compress&cs=tinysrgb&w=800",
+            availability: "Available",
+            description: "The pinnacle of luxury SUVs. Unmatched off-road capability combined with a beautifully crafted interior and powerful hybrid engine.",
+            features: ["4WD", "Air Suspension", "3D Surround Camera", "Meridian Sound"],
+            capacity: 7,
+            addedBy: "admin@drivefleet.com",
+            booking_count: 8,
+            createdAt: new Date(Date.now() - 5 * 3600000)
+          },
+          {
+            modelName: "911 GT3",
+            brand: "Porsche",
+            type: "Luxury",
+            price: 250,
+            imageUrl: "https://images.pexels.com/photos/3842567/pexels-photo-3842567.jpeg?auto=compress&cs=tinysrgb&w=800",
+            availability: "Available",
+            description: "Track-bred performance for the open road. Heart-stopping acceleration, flawless handling, and the iconic Porsche silhouette.",
+            features: ["PDK Transmission", "Sport Exhaust", "Carbon Seats", "Bose Audio"],
+            capacity: 2,
+            addedBy: "admin@drivefleet.com",
+            booking_count: 12,
+            createdAt: new Date(Date.now() - 4 * 3600000)
+          },
+          {
+            modelName: "iX M60",
+            brand: "BMW",
+            type: "Electric",
+            price: 140,
+            imageUrl: "https://images.pexels.com/photos/8925227/pexels-photo-8925227.jpeg?auto=compress&cs=tinysrgb&w=800",
+            availability: "Available",
+            description: "Bold, spacious, and completely electric. Features high-performance M engineering and an absolute vanguard glass interior cockpit.",
+            features: ["Integral Active Steering", "Bowers & Wilkins Sound", "Sky Lounge Roof"],
+            capacity: 5,
+            addedBy: "admin@drivefleet.com",
+            booking_count: 3,
+            createdAt: new Date(Date.now() - 3 * 3600000)
+          },
+          {
+            modelName: "A8 L",
+            brand: "Audi",
+            type: "Sedan",
+            price: 110,
+            imageUrl: "https://images.pexels.com/photos/1149831/pexels-photo-1149831.jpeg?auto=compress&cs=tinysrgb&w=800",
+            availability: "Available",
+            description: "Executive luxury sedan offering absolute comfort, virtual cockpit dual screens, and whisper-quiet ride mechanics.",
+            features: ["Quattro AWD", "Rear Executive Seats", "Matrix LED", "Valcona Leather"],
+            capacity: 5,
+            addedBy: "admin@drivefleet.com",
+            booking_count: 4,
+            createdAt: new Date(Date.now() - 2 * 3600000)
+          },
+          {
+            modelName: "G63 AMG",
+            brand: "Mercedes-Benz",
+            type: "SUV",
+            price: 300,
+            imageUrl: "https://images.pexels.com/photos/10394779/pexels-photo-10394779.jpeg?auto=compress&cs=tinysrgb&w=800",
+            availability: "Available",
+            description: "The legendary G-Wagon. Brutal V8 twin-turbo power, status-defining exterior, and ultra-high-end bespoke leather tailoring.",
+            features: ["AMG Ride Control", "Triple Locking Diffs", "Burmester 3D Sound"],
+            capacity: 5,
+            addedBy: "admin@drivefleet.com",
+            booking_count: 15,
+            createdAt: new Date(Date.now() - 1 * 3600000)
+          }
+        ]);
+        console.log("Seeding complete!");
+      }
+    } catch (err) {
+      console.error("Error seeding database:", err);
+    }
+
     // Add a Car
     app.post('/cars', verifyToken, async (req, res) => {
       const car = req.body;
