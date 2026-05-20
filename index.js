@@ -15,8 +15,18 @@ const app = express();
 const port = process.env.PORT || 5000;
 
 // CORS must be configured properly for credentials to work with Better Auth
+const allowedOrigins = [
+    'http://localhost:3000',
+    'http://127.0.0.1:3000',
+    'http://localhost:3001',
+    'http://127.0.0.1:3001'
+];
+if (process.env.CLIENT_URL) {
+    allowedOrigins.push(process.env.CLIENT_URL);
+}
+
 app.use(cors({
-    origin: ['http://localhost:3000', 'http://127.0.0.1:3000', 'http://localhost:3001', 'http://127.0.0.1:3001'],
+    origin: allowedOrigins,
     credentials: true
 }));
 
@@ -44,7 +54,7 @@ async function run() {
   try {
     // await client.connect();
     db = client.db("drivefleet");
-    await client.db("admin").command({ ping: 1 });
+    //await client.db("admin").command({ ping: 1 });
     console.log("Pinged your deployment. You successfully connected to MongoDB!");
 
     // Custom Middleware to verify Better Auth Session
@@ -298,6 +308,10 @@ async function run() {
 }
 run().catch(console.dir);
 
-app.listen(port, () => {
-    console.log(`Server is running on port: ${port}`);
-});
+if (process.env.NODE_ENV !== 'production' || !process.env.VERCEL) {
+    app.listen(port, () => {
+        console.log(`Server is running on port: ${port}`);
+    });
+}
+
+export default app;
